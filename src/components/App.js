@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react'
 
 import Filters from './Filters'
@@ -67,3 +68,68 @@ class App extends React.Component {
 }
 
 export default App
+=======
+import React from 'react'
+
+import Filters from './Filters'
+import PetBrowser from './PetBrowser'
+
+class App extends React.Component {
+  constructor() {
+    super()
+
+    this.state = {
+      pets: [],
+      filters: {
+        type: 'all'
+      }
+    }
+  }
+  
+  getDemPets = () => {
+    let mockApi = '/api/pets'
+    if (this.state.filters.type !== 'all') {
+      mockApi += `?type=${this.state.filters.type}`
+    }
+    fetch(mockApi) 
+      .then(res => res.json())
+      .then(pets => this.setState({ pets: pets }));
+  };
+  
+  onChangeType = ({ target: { value } }) => {
+    this.setState({ filters: { ...this.state.filters, type: value } });
+  };
+  
+  onAdoptPet = petId => {
+    const pets = this.state.pets.map(p => {
+    return p.id === petId ? {...p, isAdopted: true} : p;
+    });
+    this.setState({ pets: pets });
+  };
+
+
+  render() {
+    return (
+      <div className="ui container">
+        <header>
+          <h1 className="ui dividing header">React Animal Shelter</h1>
+        </header>
+        <div className="ui container">
+          <div className="ui grid">
+            <div className="four wide column">
+              <Filters 
+              onChangeType={this.onChangeType}
+              onFindPetsClick={this.getDemPets} />
+            </div>
+            <div className="twelve wide column">
+              <PetBrowser pets={this.state.pets} onAdoptPet={this.onAdoptPet}/>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+}
+
+export default App
+>>>>>>> 36f75c5736fc7ae56c1e3e0337a54b9c231d9e25
